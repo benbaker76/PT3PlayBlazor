@@ -1,0 +1,14 @@
+﻿@page "/"
+@using Blazor.Extensions.Canvas
+@inherits WebGLComponent
+
+<PageTitle>Home</PageTitle>
+
+<BECanvas Width="800" Height="600" @ref="_canvasReference"></BECanvas>
+<div style="margin-top: 20px;">
+    <button @onclick="PreviousSong">Previous Song</button>
+    <button @onclick="NextSong">Next Song</button>
+    <button @onclick="PreviousSFX">Previous SFX</button>
+    <button @onclick="NextSFX">Next SFX</button>
+    <button @onclick="PlaySFX">Play SFX</button>
+</div>
