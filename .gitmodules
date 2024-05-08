@@ -1,4 +1,7 @@
 [submodule "Blazor.Extensions.Canvas"]
 	path = Blazor.Extensions.Canvas
-	url = git@github.com:benbaker76/Blazor.Extensions.Canvas.git
+	url = https://github.com/benbaker76/Blazor.Extensions.Canvas
 	ignore = dirty
+[submodule "Blazor.WebAudio"]
+	path = Blazor.WebAudio
+	url = https://github.com/KristofferStrube/Blazor.WebAudio

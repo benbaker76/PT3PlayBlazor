@@ -1,14 +1,24 @@
 ﻿@page "/"
 @using Blazor.Extensions.Canvas
+@using KristofferStrube.Blazor.WebAudio
 @inherits WebGLComponent
 
 <PageTitle>Home</PageTitle>
 
 <BECanvas Width="800" Height="600" @ref="_canvasReference"></BECanvas>
-<div style="margin-top: 20px;">
+<div style="margin-top: 20px;display:flex;flex-direction:row;grid-gap:5px;">
+    <button @onclick="PlaySong">Play Song</button>
     <button @onclick="PreviousSong">Previous Song</button>
     <button @onclick="NextSong">Next Song</button>
     <button @onclick="PreviousSFX">Previous SFX</button>
     <button @onclick="NextSFX">Next SFX</button>
     <button @onclick="PlaySFX">Play SFX</button>
+    @if (_resolution is PullAudioWorkletProcessor.Resolution.Byte)
+    {
+        <button @onclick="() => _resolution = PullAudioWorkletProcessor.Resolution.Double">Resolution: Low (byte)</button>
+    }
+    else
+    {
+        <button @onclick="() => _resolution = PullAudioWorkletProcessor.Resolution.Byte">Resolution: Full (double)</button>
+    }
 </div>

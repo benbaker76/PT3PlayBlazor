@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RunAOTCompilation>true</RunAOTCompilation>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Blazor.Extensions.Canvas\src\Blazor.Extensions.Canvas.JS\Blazor.Extensions.Canvas.JS.csproj" />
     <ProjectReference Include="..\Blazor.Extensions.Canvas\src\Blazor.Extensions.Canvas\Blazor.Extensions.Canvas.csproj" />
+    <ProjectReference Include="..\Blazor.WebAudio\src\KristofferStrube.Blazor.WebAudio\KristofferStrube.Blazor.WebAudio.csproj" />
+    <ProjectReference Include="..\KristofferStrube.Blazor.WebAudio\KristofferStrube.Blazor.WebAudio.csproj" />
   </ItemGroup>
 
 </Project>

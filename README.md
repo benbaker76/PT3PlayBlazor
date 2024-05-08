@@ -4,14 +4,11 @@ This is a Pro Tracker 3.x format chip tune music player ported to C#. It plays [
 
 ## Demo
 
-This demo runs on Windows only as it uses the SlimDX (DirectX 9) library for the spectrum analyzer rendering.
+This demo runs in Blazor and uses the [Blazor.WebAudio](https://github.com/KristofferStrube/Blazor.WebAudio) library by [Kristoffer Strube](https://github.com/KristofferStrube). I want to extend my gratitude to Kirstoffer for his work on Blazor.WebAudio and specifically adding the AudioWorklet APIs required for this demo to render audio in real-time.
 
 ## Controls
 
-- **Up/Down**: Change song
-- **Left/Right**: Change sound effect
-- **Space**: Play currently selected sound effect
-- **ESC or Window Close Button**: Exit
+Use the buttons in the browser to control the music and SFX.
 
 ## Screenshot
 
@@ -30,3 +27,4 @@ Special thanks to the following individuals and projects for their contributions
 - The spectrum analyzer code is from the [ESPboy_PT3Play](https://github.com/ESPboy-edu/ESPboy_PT3Play) project by Shiru
 - The demo music is by Shiru ([link](https://shiru.untergrund.net/software.shtml)).
 - Also thanks to authors of the sound effects that are included in the library.
+- [Blazor.WebAudio](https://github.com/KristofferStrube/Blazor.WebAudio) by [Kristoffer Strube](https://github.com/KristofferStrube)

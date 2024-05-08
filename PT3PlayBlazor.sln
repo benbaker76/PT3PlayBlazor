@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Extensions.Canvas", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Extensions.Canvas.JS", "Blazor.Extensions.Canvas\src\Blazor.Extensions.Canvas.JS\Blazor.Extensions.Canvas.JS.csproj", "{E0C8F7D3-D55D-4362-A187-712DAAC2E3A4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KristofferStrube.Blazor.WebAudio", "Blazor.WebAudio\src\KristofferStrube.Blazor.WebAudio\KristofferStrube.Blazor.WebAudio.csproj", "{9C247310-AD25-4617-AB0E-A290BEC18B96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E0C8F7D3-D55D-4362-A187-712DAAC2E3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0C8F7D3-D55D-4362-A187-712DAAC2E3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0C8F7D3-D55D-4362-A187-712DAAC2E3A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C247310-AD25-4617-AB0E-A290BEC18B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C247310-AD25-4617-AB0E-A290BEC18B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C247310-AD25-4617-AB0E-A290BEC18B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C247310-AD25-4617-AB0E-A290BEC18B96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
