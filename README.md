@@ -1,4 +1,4 @@
-# PT3Play
+# PT3PlayBlazor
 
 This is a Pro Tracker 3.x format chip tune music player ported to C#. It plays [AY-3-8910](https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910) chip tune music found on the ZX Spectrum.
 
