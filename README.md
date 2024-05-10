@@ -6,6 +6,8 @@ This is a Pro Tracker 3.x format chip tune music player ported to C#. It plays [
 
 This demo runs in Blazor and uses the [Blazor.WebAudio](https://github.com/KristofferStrube/Blazor.WebAudio) library by [Kristoffer Strube](https://github.com/KristofferStrube). I want to extend my gratitude to Kirstoffer for his work on Blazor.WebAudio and specifically adding the AudioWorklet APIs required for this demo to render audio in real-time.
 
+[Live Demo](https://baker76.com/apps/pt3play/)
+
 ## Controls
 
 Use the buttons in the browser to control the music and SFX.
