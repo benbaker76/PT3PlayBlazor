@@ -13,8 +13,6 @@ namespace PT3PlayBlazor
 
         protected BECanvasComponent _canvasReference;
 
-        protected PullAudioWorkletProcessor.Resolution _resolution = PullAudioWorkletProcessor.Resolution.Byte;
-
         private System.Timers.Timer _timer;
 
         [Inject]
@@ -30,10 +28,16 @@ namespace PT3PlayBlazor
 
         private WebGLProgram _specProgram;
 
-        AudioContext? _audioContext;
-        AudioDestinationNode? _destination;
-        GainNode? _gainNode;
-        PullAudioWorkletProcessor? _processor;
+        public PullAudioWorkletProcessor.Options _audioOptions = new()
+        {
+            LowTide = 10,
+            HighTide = 50,
+            BufferRequestSize = 10,
+        };
+        private AudioContext? _audioContext;
+        private AudioDestinationNode? _destination;
+        private GainNode? _gainNode;
+        public PullAudioWorkletProcessor? _processor;
 
         private int _currentSong = 0;
         private int _currentSfx = 0;
@@ -95,7 +99,7 @@ namespace PT3PlayBlazor
             }
         }
 
-        public async Task InitAudioContext()
+        public async Task StartSound()
         {
             if (_audioContext != null)
                 return;
@@ -110,40 +114,64 @@ namespace PT3PlayBlazor
             _audioContext = await AudioContext.CreateAsync(JsRuntime, audioContextOptions);
 
             // Create and register node.
-            _processor = await PullAudioWorkletProcessor.CreateAsync(_audioContext, new()
+            _audioOptions.ProduceMono = null;
+            _audioOptions.ProduceStereo = () =>
             {
-                Resolution = _resolution,
-                LowTide = 10,
-                HighTide = 50,
-                BufferRequestSize = 10,
-                ProduceStereo = () =>
-                {
-                    short music_l, music_r;
-                    short sfx_l, sfx_r;
+                short music_l, music_r;
+                short sfx_l, sfx_r;
 
-                    PT3Play.EmulateSample(out music_l, out music_r);
-                    AYFx.EmulateSample(out sfx_l, out sfx_r);
+                PT3Play.EmulateSample(out music_l, out music_r);
+                AYFx.EmulateSample(out sfx_l, out sfx_r);
 
-                    int sample_l = (music_l + sfx_l) / 2;
-                    int sample_r = (music_r + sfx_r) / 2;
+                int sample_l = (music_l + sfx_l) / 2;
+                int sample_r = (music_r + sfx_r) / 2;
 
-                    if (sample_l > 32767)
-                        sample_l = 32767;
-                    if (sample_r > 32767)
-                        sample_r = 32767;
+                if (sample_l > 32767)
+                    sample_l = 32767;
+                if (sample_r > 32767)
+                    sample_r = 32767;
 
-                    double out_l = ((double)sample_l - 16384) / 16384.0;
-                    double out_r = ((double)sample_r - 16384) / 16384.0;
+                double out_l = ((double)sample_l - 16384) / 16384.0;
+                double out_r = ((double)sample_r - 16384) / 16384.0;
 
-                    return (out_l, out_r);
-                }
-            });
+                return (out_l, out_r);
+            };
 
+            _processor = await PullAudioWorkletProcessor.CreateAsync(_audioContext, _audioOptions);
             _destination = await _audioContext.GetDestinationAsync();
             _gainNode = await GainNode.CreateAsync(JsRuntime, _audioContext, new() { Gain = 1.0f });
             await _processor.Node.ConnectAsync(_gainNode);
             await _gainNode.ConnectAsync(_destination);
         }
+
+        public async Task StopSound()
+        {
+            if (_audioContext is not null)
+            {
+                await _audioContext.DisposeAsync();
+                _audioContext = null;
+            }
+
+            if (_destination is not null)
+            {
+                await _destination.DisposeAsync();
+                _destination = null;
+            }
+
+            if (_gainNode is not null)
+            {
+                var localGainNode = _gainNode;
+                _gainNode = null;
+                await localGainNode.DisconnectAsync();
+            }
+
+            if (_processor is not null)
+            {
+                await _processor.DisposeAsync();
+                _processor = null;
+            }
+        }
+
 
         private async Task UpdateAndRender()
         {
@@ -164,8 +192,6 @@ namespace PT3PlayBlazor
 
         public async void PlaySong()
         {
-            await InitAudioContext();
-
             byte[] musicBytes = await HttpClient.GetByteArrayAsync(_songArray[_currentSong]);
             PT3Play.MusicPlay(ref musicBytes);
         }
@@ -206,8 +232,6 @@ namespace PT3PlayBlazor
 
         public async void PlaySFX()
         {
-            await InitAudioContext();
-
             AYFx.SFX_Play(_currentSfx);
         }
 
@@ -218,20 +242,10 @@ namespace PT3PlayBlazor
 
         public async ValueTask DisposeAsync()
         {
+            await StopSound();
+
             _timer.Stop();
             _timer.Dispose();
-
-            if (_audioContext is not null)
-                await _audioContext.DisposeAsync();
-
-            if (_gainNode is not null)
-                await _gainNode.DisposeAsync();
-
-            if (_destination is not null)
-                await _destination.DisposeAsync();
-
-            if (_processor is not null)
-                await _processor.DisposeAsync();
         }
     }
 }

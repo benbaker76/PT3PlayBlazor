@@ -7,18 +7,44 @@
 
 <BECanvas Width="800" Height="600" @ref="_canvasReference"></BECanvas>
 <div style="margin-top: 20px;display:flex;flex-direction:row;grid-gap:5px;">
-    <button @onclick="PlaySong">Play Song</button>
-    <button @onclick="PreviousSong">Previous Song</button>
-    <button @onclick="NextSong">Next Song</button>
-    <button @onclick="PreviousSFX">Previous SFX</button>
-    <button @onclick="NextSFX">Next SFX</button>
-    <button @onclick="PlaySFX">Play SFX</button>
-    @if (_resolution is PullAudioWorkletProcessor.Resolution.Byte)
+    @if (_processor is null)
     {
-        <button @onclick="() => _resolution = PullAudioWorkletProcessor.Resolution.Double">Resolution: Low (byte)</button>
+        <div style="display:flex; flex-direction:column; grid-gap: 5px;">
+            <button class="btn btn-success" @onclick=StartSound>Start Sound</button>
+            <div>
+                <label for="lowTide">Low Tide</label>
+                <input id="lowTide" @bind=_audioOptions.LowTide />
+            </div>
+            <div>
+                <label for="highTide">High Tide</label>
+                <input id="highTide" @bind=_audioOptions.HighTide />
+            </div>
+            <div>
+                <label for="bufferRequestSize">Buffer Request Size</label>
+                <input id="bufferRequestSize" @bind=_audioOptions.BufferRequestSize />
+            </div>
+            <div>
+                <label for="resolution">Resolution&nbsp;</label>
+                @if (_audioOptions.Resolution is PullAudioWorkletProcessor.Resolution.Byte)
+                {
+                    <button id="resolution" class="btn btn-warning btn-sm" @onclick="() => _audioOptions.Resolution = PullAudioWorkletProcessor.Resolution.Double">Low resolution (byte)</button>
+                }
+                else
+                {
+                    <button id="resolution" class="btn btn-success btn-sm" @onclick="() => _audioOptions.Resolution = PullAudioWorkletProcessor.Resolution.Byte">Full resolution (double)</button>
+                }
+            </div>
+            <hr />
+        </div>
     }
     else
     {
-        <button @onclick="() => _resolution = PullAudioWorkletProcessor.Resolution.Byte">Resolution: Full (double)</button>
+        <button class="btn btn-warning" @onclick=StopSound>Stop Sound</button>
+        <button @onclick="PlaySong">Play Song</button>
+        <button @onclick="PreviousSong">Previous Song</button>
+        <button @onclick="NextSong">Next Song</button>
+        <button @onclick="PreviousSFX">Previous SFX</button>
+        <button @onclick="NextSFX">Next SFX</button>
+        <button @onclick="PlaySFX">Play SFX</button>
     }
 </div>
