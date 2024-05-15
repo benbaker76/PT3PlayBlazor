@@ -84,41 +84,53 @@ namespace PT3PlayBlazor
 
             var uColorLocation = await Context.GetUniformLocationAsync(program, "uColor");
 
-            await Context.UniformAsync(uColorLocation, new float[] { 1.0f, 0.0f, 0.0f, 1.0f });
-
             float barWidth = (float)screenSize.Width / specLevels.Length;
             float barHeight = (float)screenSize.Height;
 
-            List<float> vertices = new List<float>();
-
-            for (int i = 0; i < specLevels.Length; i++)
+            for (int c = 0; c < specColors.Length; c++)
             {
-                float x1 = i * barWidth;
-                float x2 = (i + 1) * barWidth;
-                float y1 = barHeight - ((float)specLevels[i] / PT3Play.SPEC_HEIGHT) * barHeight;
-                float y2 = barHeight;
+                var color = specColors[c];
+                
+                List<float> vertices = new List<float>();
 
-                vertices.AddRange(new float[]
+                for (int i = 0; i < specLevels.Length; i++)
                 {
-                    x1, y1, 0.0f,
-                    x2, y1, 0.0f,
-                    x2, y2, 0.0f
+                    if (specColors[i] == color)
+                    {
+                        float x1 = i * barWidth;
+                        float x2 = (i + 1) * barWidth;
+                        float y1 = barHeight - ((float)specLevels[i] / PT3Play.SPEC_HEIGHT) * barHeight;
+                        float y2 = barHeight;
+
+                        vertices.AddRange(new float[]
+                        {
+                            x1, y1, 0.0f,
+                            x2, y1, 0.0f,
+                            x2, y2, 0.0f
+                        });
+
+                        vertices.AddRange(new float[]
+                        {
+                            x1, y1, 0.0f,
+                            x2, y2, 0.0f,
+                            x1, y2, 0.0f
+                        });
+                    }
+                }
+
+                await Context.UniformAsync(uColorLocation, new float[]
+                {
+                    ((color >> 16) & 0xFF) / 255.0f,
+                    ((color >> 8) & 0xFF) / 255.0f,
+                    (color & 0xFF) / 255.0f,
+                    1.0f
                 });
 
-                vertices.AddRange(new float[]
-                {
-                    x1, y1, 0.0f,
-                    x2, y2, 0.0f,
-                    x1, y2, 0.0f
-                });
+                await Context.BufferDataAsync(BufferType.ARRAY_BUFFER, vertices.ToArray(), BufferUsageHint.STATIC_DRAW);
+                await Context.VertexAttribPointerAsync(0, 3, DataType.FLOAT, false, 0, 0);
+                await Context.EnableVertexAttribArrayAsync(0);
+                await Context.DrawArraysAsync(Primitive.TRIANGLES, 0, vertices.Count / 3);
             }
-
-            await Context.BufferDataAsync(BufferType.ARRAY_BUFFER, vertices.ToArray(), BufferUsageHint.STATIC_DRAW);
-
-            await Context.VertexAttribPointerAsync(0, 3, DataType.FLOAT, false, 0, 0);
-            await Context.EnableVertexAttribArrayAsync(0);
-
-            await Context.DrawArraysAsync(Primitive.TRIANGLES, 0, vertices.Count / 3);
         }
 
         public static WebGLContext Context { get; set; }
